@@ -25,13 +25,17 @@ source-repository head
 
 library
   exposed-modules:
+      Command
       Lib
+      State
+      Term
   other-modules:
       Paths_hell
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , strict-io
   default-language: Haskell2010
 
 executable hell-exe
@@ -44,6 +48,7 @@ executable hell-exe
   build-depends:
       base >=4.7 && <5
     , hell
+    , strict-io
   default-language: Haskell2010
 
 test-suite hell-test
@@ -57,4 +62,5 @@ test-suite hell-test
   build-depends:
       base >=4.7 && <5
     , hell
+    , strict-io
   default-language: Haskell2010
