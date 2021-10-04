@@ -8,7 +8,7 @@ import           State
 import qualified System.Environment as Env
 import qualified System.Directory   as Dir
 import qualified System.Process     as Proc
-import qualified GHC.IO.Exception   as Exc
+import           System.Exit
 
 _c1 :: String
 _c1 = "exit"
@@ -38,13 +38,11 @@ getEnv s = do env <- Env.getEnvironment
         stred ((x,y):xs) = "\t" ++ x ++ " = " ++ y ++ "\n" ++ stred xs
 
 actRun :: State -> FilePath -> [String] -> IO (State, String)
-actRun s fp args = do (code, out, err) <- Proc.readProcessWithExitCode fp args ""
-                      return (setCode s $ pCode code, conc out err)
-  where pCode Exc.ExitSuccess     = 0
-        pCode (Exc.ExitFailure i) = i
-        conc ""  err              = err
-        conc out ""               = out
-        conc out err              = out ++ "\n\n" ++ err
+actRun s fp args = do procHandle     <- Proc.spawnProcess fp args
+                      ex             <- Proc.waitForProcess procHandle
+                      let eCode      =  case ex of ExitSuccess   -> 0
+                                                   ExitFailure i -> i
+		      return (setCode s eCode, "")
 
 call :: State -> Command -> IO (State, String)
 call s (Command cmnd args) = do fPath <- Dir.findExecutable cmnd
