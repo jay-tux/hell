@@ -19,6 +19,9 @@ _c2 = "_printState"
 _c3 :: String
 _c3 = "_printEnv"
 
+_c4 :: String
+_c4 = "no"
+
 data Command = Command {
   cmnd :: String,
   args :: [String]
@@ -50,8 +53,9 @@ call s (Command cmnd args) = do fPath <- Dir.findExecutable cmnd
 
 exec :: State -> Command -> IO (State, String)
 exec s c@(Command cmd args)
- | cmd == ""  = return (s, "")
- | cmd == _c1 = return (exit s, "")
- | cmd == _c2 = return (s,      show s)
- | cmd == _c3 = getEnv s
- | otherwise  = call   s c
+ | cmd == ""  = return (setCode s 0, "")
+ | cmd == _c1 = return (exit s,      "")
+ | cmd == _c2 = return (setCode s 0, show s)
+ | cmd == _c3 = getEnv $ setCode s 0
+ | cmd == _c4 = return (setCode s 0, "Please, no")
+ | otherwise  = call   (setCode s 0) c
