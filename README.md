@@ -1,1 +1,2 @@
-# hell
+# Jay's Hell
+*Simple Haskell shell*
