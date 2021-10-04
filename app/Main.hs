@@ -11,8 +11,6 @@ main = loop defaultState
                           putStr     $  prompt s
                           hFlush     $  stdout
                           cmnd       <- getLine
-                          (s'', out) <- runCommand cmnd s
-                          case out         of ""    -> return ()
-                                              _     -> putStrLn $  out
+                          s''        <- runCommand cmnd s
                           case (isEnd s'') of True  -> return ()
                                               False -> loop $ return s''
