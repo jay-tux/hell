@@ -2,9 +2,9 @@ module Term (
   prompt, runCommand
 ) where
 
-import Lib
-import State
-import Command
+import           Lib
+import           State
+import           Command
 
 prompt :: State -> String
 prompt s = code (eCode s) ++ path ++ "> "
@@ -12,5 +12,5 @@ prompt s = code (eCode s) ++ path ++ "> "
         code i = show i ++ " "
         path   = replPrefix (home s) (pwd s) "~"
 
-runCommand :: String -> State -> IO (State, String)
+runCommand :: String -> State -> IO State
 runCommand i s = exec s $ parseCommand i
